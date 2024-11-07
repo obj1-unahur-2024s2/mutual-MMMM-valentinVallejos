@@ -1,9 +1,151 @@
-import example.pepita
+import actividades.*
+import socios.*
 
-describe "group of tests for pepita" {
+describe "test actividades" {
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+  method initialize(){
+    const p1 = new ViajesALaPlaya ( largo = 1500, idiomas = ["español" , "ingles"])
+
+    const p2 = new ViajesALaPlaya ( largo = 1100, idiomas = ["ingles"])
+
+    const c1 = new EscurcionALaCiudad (atracciones = 5 , idiomas = ["español","quechua"])
+
+    const c2 = new EscurcionALaCiudad (atracciones = 9 , idiomas = ["quechua"])
+
+    const cp1 = new EscurcionALaCiudadTropical (atracciones = 6 , idiomas = ["español","quechua","ingles"])
+
+    const s1 = new SalidaDeTrekking (kmACaminar = 120 , diasDeSol= 50, idiomas = ["español" , "ingles"])
+    const s2 = new SalidaDeTrekking (kmACaminar = 70 , diasDeSol= 143, idiomas = ["español"])
+
+    
   }
+
+  test "dias de playa con 1500 de largo " {
+    const p1 = new ViajesALaPlaya ( largo = 1500, idiomas = ["español" , "ingles"])
+
+    assert.equals(3, p1.dias())
+  }
+
+  test "dias de escurcion en ciudad de 5 atracciones"{
+    const c1 = new EscurcionALaCiudad (atracciones = 5 , idiomas = ["español","quechua"])
+
+     assert.equals(5 /2, c1.dias())
+  }
+
+  test "dias de escurcion en ciudad tropical de 5 atracciones"{
+    const c1 = new EscurcionALaCiudadTropical (atracciones = 5 , idiomas = ["español","quechua"])
+
+     assert.equals((5 /2) +1, c1.dias())
+  }
+
+  test "dias de treking con 120 km de camino"{
+    const s1 = new SalidaDeTrekking (kmACaminar = 120 , diasDeSol= 50, idiomas = ["español" , "ingles"])
+
+    assert.equals(120/50 , s1.dias())
+  }
+
+  test "trekking sirve para broncearse con 99 dias de sol" {
+    const s1 = new SalidaDeTrekking (kmACaminar = 120 , diasDeSol= 99, idiomas = ["español" , "ingles"])
+    
+    assert.that(s1.sirveParaBroncear())
+  }
+
+  test "trekking no sirve para broncearse con 100 dias de sol" {
+    const s1 = new SalidaDeTrekking (kmACaminar = 120 , diasDeSol= 100, idiomas = ["español" , "ingles"])
+    
+    assert.notThat(s1.sirveParaBroncear())
+  }
+
+  test "playa es interesante con 2 idiomas" {
+     const p1 = new ViajesALaPlaya ( largo = 1500, idiomas = ["español" , "ingles"])
+
+     assert.that(p1.esInteresante())
+  }
+
+  test "ciudad es interesante si tiene 5 actracciones" {
+    const c1 = new EscurcionALaCiudadTropical (atracciones = 5 , idiomas = ["español","quechua"])
+
+    assert.that(c1.esInteresante())
+  }
+
+  test "ciudad no  es interesante si tiene 3 actracciones" {
+    const c1 = new EscurcionALaCiudadTropical (atracciones = 3 , idiomas = ["español","quechua"])
+
+    assert.notThat(c1.esInteresante())
+  }
+
+  test "salidad de trekking es interesante si tiene 143 dias de sol" {
+    const s1 = new SalidaDeTrekking (kmACaminar = 70 , diasDeSol= 143, idiomas = ["español" , "ingles"])
+
+    assert.that(s1.esInteresante())
+  }
+
+  test "salidad de trekking no es interesante si tiene 139 dias de sol" {
+    const s1 = new SalidaDeTrekking (kmACaminar = 70 , diasDeSol= 139, idiomas = ["español" , "ingles"])
+
+    assert.notThat(s1.esInteresante())
+  }
+
+
+
+}
+
+describe "socios" {
+
+  test "socio coherernte es adorador del sol, si solo fue a la playa"{
+    const p1 = new ViajesALaPlaya ( largo = 1100, idiomas = ["español" , "ingles"])
+    const st = new SociosCoherentes (maxDeActividades = 2 , edad = 24)
+
+    assert.that(st.esAdoradorDelSol())
+  }
+
+  test "socio tranquilo le atrae viaje a playa de largo 2500"{
+  const p1 = new ViajesALaPlaya ( largo = 2500, idiomas = ["español" , "ingles"])
+  const st = new SociosTranquilos (maxDeActividades = 2 , edad = 24)
+
+  assert.that(st.leAtre(p1))
+  }
+
+  test "Socios Coherentes y adorador del sol le atrae playa "{
+
+  const p1 = new ViajesALaPlaya ( largo = 1100, idiomas = ["español" , "ingles"])
+  const st = new SociosCoherentes (maxDeActividades = 2 , edad = 24)
+
+  st.realizarActividad(p1) 
+
+  assert.that(st.leAtre(p1))
+  }
+
+  test "Socios Coherentes  del sol le atrae ciudad con 5 atracciones"{
+
+  const c1 = new EscurcionALaCiudadTropical (atracciones = 5 , idiomas = ["español","quechua"])
+  const st = new SociosCoherentes (maxDeActividades = 2 , edad = 24)
+
+  assert.that(st.leAtre(c1))
+  }
+
+ test "Socios Coherentes y adorador del sol, no le atrae ciudad"{
+  const p1 = new ViajesALaPlaya ( largo = 1100, idiomas = ["español" , "ingles"])
+  const c1 = new EscurcionALaCiudad (atracciones = 5 , idiomas = ["español","quechua"])
+  const st = new SociosCoherentes (maxDeActividades = 2 , edad = 24)
+
+  st.realizarActividad(p1) 
+
+  assert.notThat(st.leAtre(c1))
+  }
+test "SocioRelajado q sabe español  le atrae playa con español e ingles " {
+  const p1 = new ViajesALaPlaya ( largo = 1100, idiomas = ["español" , "ingles"])
+  const sr = new SocioRelajado (maxDeActividades = 2 , edad = 24 , idiomas = ["español"])
+
+   assert.that(sr.leAtre(p1))
+}
+
+test "SocioRelajado q sabe español  le atrae playa con quechua e ingles " {
+  const p1 = new ViajesALaPlaya ( largo = 1100, idiomas = ["quechua" , "ingles"])
+  const sr = new SocioRelajado (maxDeActividades = 2 , edad = 24 , idiomas = ["español"])
+
+   assert.notThat(sr.leAtre(p1))
+}
+
 
 }
